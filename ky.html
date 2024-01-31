@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keyboard Typing Practice Game</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  #wordDisplay {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  #inputBox {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  #retryButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    display: none;
+  }
+
+  #result {
+    color: red;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<h1>Keyboard Typing Practice Game</h1>
+<p id="wordDisplay">Type the following word:</p>
+<input type="text" id="inputBox" oninput="checkInput()">
+<p id="result"></p>
+<button id="retryButton" onclick="restartGame()">Retry</button>
+
+<script>
+  const words = ["apple", "banana", "orange", "grape", "strawberry"];
+  let currentWordIndex = 0;
+  let startTime;
+
+  displayWord();
+
+  function displayWord() {
+    document.getElementById("wordDisplay").textContent = words[currentWordIndex];
+    startTime = new Date().getTime();
+  }
+
+  function checkInput() {
+    const userInput = document.getElementById("inputBox").value;
+    if (userInput === words[currentWordIndex]) {
+      currentWordIndex++;
+      if (currentWordIndex === words.length) {
+        const endTime = new Date().getTime();
+        const totalTime = (endTime - startTime) / 1000;
+        const wpm = Math.round(words.join("").length / 5 / (totalTime / 60));
+        document.getElementById("result").textContent = "Congratulations! Your average typing speed is " + wpm + " WPM.";
+        document.getElementById("inputBox").disabled = true;
+        document.getElementById("retryButton").style.display = "block";
+      } else {
+        document.getElementById("inputBox").value = "";
+        displayWord();
+        document.getElementById("result").textContent = "";
+      }
+    } else {
+      document.getElementById("result").textContent = "Incorrect word! Try again.";
+    }
+  }
+
+  function restartGame() {
+    currentWordIndex = 0;
+    displayWord();
+    document.getElementById("inputBox").value = "";
+    document.getElementById("inputBox").disabled = false;
+    document.getElementById("result").textContent = "";
+    document.getElementById("retryButton").style.display = "none";
+  }
+</script>
+</body>
+</html>
+
+
